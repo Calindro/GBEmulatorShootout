@@ -6,9 +6,9 @@ name: Main
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ test ]
   pull_request:
-    branches: [ main ]
+    branches: [ test ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
           python -m pip install pywin32
       - name: Check emulator startups
         run: |
-          python main.py --get-startuptime --emulator !mGBA --emulator !KiGB
+          python main.py --get-startuptime --emulator Emulicious
       - name: Archive startup time result
         uses: actions/upload-artifact@v2
         with:
@@ -43,13 +43,13 @@ jobs:
           path: startuptime.html
       - name: Run tests
         run: |
-          python main.py --emulator !mGBA --emulator !KiGB --emulator !Goomba
+          python main.py --emulator Emulicious
           python main.py --dump-tests-json --dump-emulators-json
       - name: Deploy pages
         run: |
           git config --global user.name "github actions"
           git config --global user.email "github@actions"
-          git clone --single-branch --branch gh-pages https://github.com/daid/GBEmulatorShootout.git pages
+          git clone --single-branch --branch gh-pages https://github.com/calindro/GBEmulatorShootout.git pages
           cp *.json pages/
           cd pages
           python build.py
